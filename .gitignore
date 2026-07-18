@@ -1,0 +1,12 @@
+# Power BI Desktop local cache/user files — not needed to open the project,
+# regenerated automatically, and can bloat the repo or leak local machine paths.
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
+**/.pbi/editorSettings.json
+
+# Legacy binary format — this project uses the .pbip (text-based) format instead.
+*.pbix
+
+# OS junk
+.DS_Store
+Thumbs.db

@@ -1,0 +1,89 @@
+table Products
+	lineageTag: 422c7b23-b489-40eb-8295-d989ec073cc9
+
+	column product_id
+		dataType: string
+		lineageTag: 33ae25d8-44d3-44f8-9f52-04bc9dafdaa3
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		lineageTag: e7b24052-5f31-4b9e-9ca5-547e1e7dab20
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: 9e19c053-5af1-4f4b-9839-c63067e246ec
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column sub_category
+		dataType: string
+		lineageTag: c4d83c81-e62e-4b32-bdad-eb7c0e17001c
+		summarizeBy: none
+		sourceColumn: sub_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_cost
+		dataType: decimal
+		formatString: "₹"\ #,0.###############;#,0.###############\ -"₹";"₹"\ #,0.###############
+		lineageTag: 25433fab-e490-4f43-8431-bd7c5ba8bdce
+		summarizeBy: none
+		sourceColumn: unit_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column unit_price
+		dataType: decimal
+		formatString: "₹"\ #,0.###############;#,0.###############\ -"₹";"₹"\ #,0.###############
+		lineageTag: 8ff8f5d4-6383-4eb6-904d-7f6c8652ac2d
+		summarizeBy: none
+		sourceColumn: unit_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column sku
+		dataType: string
+		lineageTag: f06f3340-d9e1-4c78-886b-7c10b43bce6d
+		summarizeBy: none
+		sourceColumn: sku
+
+		annotation SummarizationSetBy = Automatic
+
+	column Margin
+		dataType: string
+		lineageTag: 57a53444-bfe9-49d1-96bf-2ab57556ac7d
+		summarizeBy: none
+		sourceColumn: Margin
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Products = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\sriva\Documents\Power BI\PracticeProjects\ShopifyProject\Shopify_Dummy_Data.xlsx"), null, true),
+				    Products_Sheet = Source{[Item="Products",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Products_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"product_id", type text}, {"product_name", type text}, {"category", type text}, {"sub_category", type text}, {"unit_cost", Currency.Type}, {"unit_price", Currency.Type}, {"sku", type text}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type", "Margin", each [unit_price] - [unit_cost])
+				in
+				    #"Added Custom"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

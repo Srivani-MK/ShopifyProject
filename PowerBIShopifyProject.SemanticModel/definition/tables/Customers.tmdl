@@ -1,0 +1,92 @@
+table Customers
+	lineageTag: 6e0f4125-ff10-4616-9d64-2177f2eb40e3
+
+	column customer_id
+		dataType: string
+		lineageTag: 05c284f8-4e75-46f0-8124-8c4a7ddd543d
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_name
+		dataType: string
+		lineageTag: a4597470-3a6f-474a-b9a3-71db1c6dca39
+		summarizeBy: none
+		sourceColumn: customer_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: 014044ff-3fb2-4995-895d-39d41183c2f8
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column phone
+		dataType: string
+		lineageTag: ea025986-4aef-4b14-aa98-5856f2ab695f
+		summarizeBy: none
+		sourceColumn: phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: 22a1740f-3c97-428d-84f1-2fd80cbe5319
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column marketing_opt_in
+		dataType: string
+		lineageTag: 0688756e-d20f-453e-a756-c3e65e58809a
+		summarizeBy: none
+		sourceColumn: marketing_opt_in
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_since
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e3fc338c-fca0-42ee-8020-d398a7534be4
+		summarizeBy: none
+		sourceColumn: customer_since
+
+		variation Variation
+			isDefault
+			relationship: 2546f3e1-195f-4b5b-aa47-49786de5fe7d
+			defaultHierarchy: LocalDateTable_ab3c5d9c-75c9-436a-8476-a5012ecfd4a8.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Customers = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\sriva\Documents\Power BI\PracticeProjects\ShopifyProject\Shopify_Dummy_Data.xlsx"), null, true),
+				    Customers_raw_Sheet = Source{[Item="Customers_raw",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Customers_raw_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"customer_id", type text}, {"customer_name", type text}, {"email", type text}, {"phone", type text}, {"city", type text}, {"marketing_opt_in", type text}, {"customer_since", type date}}),
+				    #"customer_id - Removed Duplicates" = Table.Distinct(#"Changed Type", {"customer_id"}),
+				    #"Trimmed Text" = Table.TransformColumns(#"customer_id - Removed Duplicates",{{"customer_name", Text.Trim, type text}}),
+				    #"Capitalized Each Word" = Table.TransformColumns(#"Trimmed Text",{{"customer_name", Text.Proper, type text}}),
+				    #"Lowercased Text" = Table.TransformColumns(#"Capitalized Each Word",{{"email", Text.Lower, type text}}),
+				    #"marketing_opt_in - yes to Yes & no to No" = Table.ReplaceValue(Table.ReplaceValue(Table.ReplaceValue(#"Lowercased Text","yes","Yes", Replacer.ReplaceText,{"marketing_opt_in"}), "no", "No", Replacer.ReplaceText,{"marketing_opt_in"}), "null", "Unknown", Replacer.ReplaceText,{"marketing_opt_in"}),
+				    #"marketing_opt_in - null to Unknown" = Table.ReplaceValue(#"marketing_opt_in - yes to Yes & no to No",null,"Unknown",Replacer.ReplaceValue,{"marketing_opt_in"}),
+				    #"Filtered Rows" = Table.SelectRows(#"marketing_opt_in - null to Unknown", each true),
+				    #"phone - null to Not Provided" = Table.ReplaceValue(#"Filtered Rows",null,"Not Provided",Replacer.ReplaceValue,{"phone"}),
+				    #"Filtered Rows1" = Table.SelectRows(#"phone - null to Not Provided", each true),
+				    #"customer_since to Date type" = Table.TransformColumnTypes(#"Filtered Rows1",{{"customer_since", type date}})
+				in
+				    #"customer_since to Date type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

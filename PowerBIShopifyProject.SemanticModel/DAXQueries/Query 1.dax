@@ -1,0 +1,49 @@
+// Welcome to DAX query view! Learn more about DAX queries at https://aka.ms/dax-queries.
+// Right-click on tables, columns, or measures in the data pane to access quick queries, or ask Copilot for help writing DAX.
+
+EVALUATE
+SUMMARIZECOLUMNS(
+    Products[category],
+    "Revenue", [Total_Revenue],
+    "Units Sold", [Total_Units_Sold],
+    "% of Total", [Pct_of_Total_Revenue]
+)
+ORDER BY [Revenue] DESC
+
+
+EVALUATE
+VAR BestDay =
+    TOPN(1, SUMMARIZECOLUMNS(DateTable[date], "Revenue", [Total_Revenue]), [Revenue], DESC)
+RETURN BestDay
+
+
+EVALUATE
+SUMMARIZECOLUMNS(
+    DateTable[date],
+    FILTER(ALL(Products), Products[product_name] = "Minimalist Watch"),
+    FILTER(ALL(DateTable), YEAR(DateTable[date]) = 2024),
+    "Ad_Revenue", [Ad_Revenue]
+)
+ORDER BY DateTable[date]
+
+
+EVALUATE
+SUMMARIZECOLUMNS(
+    DateTable[date],
+    FILTER(ALL(Products), Products[product_name] = "Minimalist Watch"),
+    FILTER(ALL(DateTable), YEAR(DateTable[date]) = 2025),
+    "Ad_Revenue", [Ad_Revenue]
+)
+ORDER BY DateTable[date]
+
+
+EVALUATE
+SUMMARIZECOLUMNS(
+    Products[category],
+    'Customers'[customer_name],
+    'DateTable'[month_name],
+    "Revenue", [Total_Revenue],
+    "Units Sold", [Total_Units_Sold],
+    "% of Total", [Pct_of_Total_Revenue]
+)
+ORDER BY [Revenue] DESC

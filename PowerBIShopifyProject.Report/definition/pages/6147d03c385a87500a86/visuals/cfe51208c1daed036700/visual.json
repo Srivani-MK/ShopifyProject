@@ -1,0 +1,184 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "cfe51208c1daed036700",
+  "position": {
+    "x": 31.675817802180809,
+    "y": 258.15791508777357,
+    "z": 6000,
+    "height": 118.78431675817804,
+    "width": 1216.3514036037429,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures (2)"
+                    }
+                  },
+                  "Property": "Total_Orders"
+                }
+              },
+              "queryRef": "Measures (2).Total_Orders",
+              "nativeQueryRef": "Total_Orders"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures (2)"
+                    }
+                  },
+                  "Property": "Average_Order_Value"
+                }
+              },
+              "queryRef": "Measures (2).Average_Order_Value",
+              "nativeQueryRef": "Average_Order_Value"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures (2)"
+                    }
+                  },
+                  "Property": "Ad-Driven Orders"
+                }
+              },
+              "queryRef": "Measures (2).Ad-Driven Orders",
+              "nativeQueryRef": "Ad-Driven Orders"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures (2)"
+                    }
+                  },
+                  "Property": "Total_Units_Sold"
+                }
+              },
+              "queryRef": "Measures (2).Total_Units_Sold",
+              "nativeQueryRef": "Total_Units_Sold"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures (2)"
+                    }
+                  },
+                  "Property": "Total_Customers"
+                }
+              },
+              "queryRef": "Measures (2).Total_Customers",
+              "nativeQueryRef": "Total_Customers"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Measures (2)"
+                  }
+                },
+                "Property": "Total_Orders"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "''"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 5,
+                      "Percent": 0.6
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "border": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 5,
+                      "Percent": 0.6
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

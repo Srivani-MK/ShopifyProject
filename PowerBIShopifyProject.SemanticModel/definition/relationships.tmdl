@@ -1,0 +1,30 @@
+relationship 2546f3e1-195f-4b5b-aa47-49786de5fe7d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Customers.customer_since
+	toColumn: LocalDateTable_ab3c5d9c-75c9-436a-8476-a5012ecfd4a8.Date
+
+relationship afbdbd6e-1505-4862-8777-17b2b2823502
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DateTable.date
+	toColumn: LocalDateTable_f27c6691-0326-4763-b0df-1c337dda670b.Date
+
+relationship AutoDetected_f161fc4f-9f7f-4727-aad1-8838aea32c6d
+	fromColumn: Orders.customer_id
+	toColumn: Customers.customer_id
+
+relationship AutoDetected_320a6260-1725-45b5-8f2d-28b6823a3b65
+	fromColumn: Customers.city
+	toColumn: Geography.city
+
+relationship AutoDetected_b2a0c082-2f0a-4acf-9bee-3b678bf5b680
+	fromColumn: OrderLines.order_id
+	toColumn: Orders.order_id
+
+relationship AutoDetected_5e7559ca-1fff-442f-b81b-09f8d860b58d
+	fromColumn: OrderLines.product_id
+	toColumn: Products.product_id
+
+relationship 416bce86-47ae-741e-d8ef-816e3d35d130
+	fromColumn: Orders.order_date
+	toColumn: DateTable.date
+

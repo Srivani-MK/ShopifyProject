@@ -1,0 +1,105 @@
+table DateTable
+	lineageTag: 7bf3a36b-4571-49f2-8dea-7922277973de
+
+	column date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 29f619c8-3e3d-434b-9c72-9c0951eca962
+		summarizeBy: none
+		sourceColumn: date
+
+		variation Variation
+			isDefault
+			relationship: afbdbd6e-1505-4862-8777-17b2b2823502
+			defaultHierarchy: LocalDateTable_f27c6691-0326-4763-b0df-1c337dda670b.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 068de387-3030-4a1e-82e5-11f3d331b1f7
+		summarizeBy: sum
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 3d3a3c06-e7f6-461a-a678-6b40e233f322
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 3706b42a-f4f8-4fd7-ace6-9554ffeddc2a
+		summarizeBy: sum
+		sourceColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		lineageTag: be9482b8-b222-41f8-80f8-ce447d648cb3
+		summarizeBy: none
+		sourceColumn: month_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter
+		dataType: string
+		lineageTag: f86739eb-ef0f-4243-9248-00633c64cc9a
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week
+		dataType: string
+		lineageTag: dffb675c-7f06-4909-8101-38c3a0fce199
+		summarizeBy: none
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column week_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 588d6782-8a87-4fc9-84f3-74c70c308ba1
+		summarizeBy: sum
+		sourceColumn: week_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 3b37a413-5a14-412b-b8a7-9d1e18e39969
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DateTable = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\sriva\Documents\Power BI\PracticeProjects\ShopifyProject\Shopify_Dummy_Data.xlsx"), null, true),
+				    DateTable_Sheet = Source{[Item="DateTable",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(DateTable_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"date", type date}, {"date_key", Int64.Type}, {"year", Int64.Type}, {"month_number", Int64.Type}, {"month_name", type text}, {"quarter", type text}, {"day_of_week", type text}, {"week_number", Int64.Type}, {"is_weekend", type logical}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

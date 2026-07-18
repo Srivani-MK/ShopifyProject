@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmarksMetadata/1.0.0/schema.json",
+  "items": [
+    {
+      "name": "12c78431c3081946eeeb",
+      "displayName": "Data Summary Buttons",
+      "children": [
+        "36837b473acc8c5135da",
+        "4bf0ff85ac0ae5c8adbe",
+        "1a0754bfd094a3eb121c",
+        "21a4dce146b9ae59bde9",
+        "84ff6919db60747c9c05",
+        "8e3273f8a9db17e238b3"
+      ]
+    }
+  ]
+}

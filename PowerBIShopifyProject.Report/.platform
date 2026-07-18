@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "PowerBIShopifyProject"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ec3cd3af-95ba-45d2-970b-0aab90310bb2"
+  }
+}

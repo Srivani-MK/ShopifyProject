@@ -1,0 +1,274 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Ad_Driven Orders",
+  "name": "8e3273f8a9db17e238b3",
+  "options": {
+    "targetVisualNames": []
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "a732164aba7a33c049d6",
+    "sections": {
+      "a732164aba7a33c049d6": {
+        "visualContainers": {
+          "49dcd9bdbab774e435bd": {
+            "singleVisual": {
+              "visualType": "pageNavigator",
+              "objects": {}
+            }
+          },
+          "b7efdcf82a49075e74d6": {
+            "singleVisual": {
+              "visualType": "shape",
+              "objects": {}
+            }
+          },
+          "3970c97f108cc8b84803": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "35af9dc53b4085112c8e": {
+            "singleVisual": {
+              "visualType": "bookmarkNavigator",
+              "objects": {}
+            }
+          },
+          "502eabe105a38a1e1c42": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "ffea99c977bbc3323001",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Measures (2)"
+                        }
+                      },
+                      "Property": "Revenue_Target"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "744c279ab95c71187714": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "b2d054c7bba503379ec6",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Measures (2)"
+                        }
+                      },
+                      "Property": "Order_Target"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "5e378ad935b3d96cc561": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "0069fbdfe9076e729568",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Measures (2)"
+                        }
+                      },
+                      "Property": "Pct_Revenue_Lost_to_Refunds"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "20c0f5c332038dad3e89": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "3718e14f05e8b9622dc5",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Measures (2)"
+                        }
+                      },
+                      "Property": "Total_Revenue"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {}
+            }
+          },
+          "fa6c59809202ccdd390d": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "b1d921ac5092089911ee",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Measures (2)"
+                        }
+                      },
+                      "Property": "Total_Orders"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {}
+            }
+          },
+          "365a2e3c0bc80108bc6b": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "fa793983e81d6a694490",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Measures (2)"
+                        }
+                      },
+                      "Property": "Pct_Revenue_from_New_Customers"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "a589b3b1009a978760de": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "61c67bf00459508b2a00",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Measures (2)"
+                        }
+                      },
+                      "Property": "Pct_Revenue_from_Returning_Customers"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "715764da8a5bb579749b": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "8cbbe224dadc9ce4d657",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Measures (2)"
+                        }
+                      },
+                      "Property": "Ad-Driven Orders"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {}
+            }
+          }
+        }
+      }
+    },
+    "objects": {
+      "merge": {
+        "outspacePane": [
+          {
+            "properties": {
+              "expanded": {
+                "expr": {
+                  "Literal": {
+                    "Value": "false"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

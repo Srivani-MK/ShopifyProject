@@ -1,0 +1,68 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "d98153a3a110bc39edee",
+  "position": {
+    "x": 11.086536230763283,
+    "y": 505.22929394478388,
+    "z": 4000,
+    "height": 202.72523393395718,
+    "width": 348.43399582398888,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "66% of cancelled orders are from Organic platform which is highest."
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "To discuss on orders with \"pending\" status,"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Suggestion: "
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "The order status with pending which is older than 9 months should be cleared and notify customer to add products to add again."
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "For less than 9 months we need email notification on pending order."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

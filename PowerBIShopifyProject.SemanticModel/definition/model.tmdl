@@ -1,0 +1,27 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Customers","DateTable","Geography","OrderLines","Orders","Products","Measures (2)"]
+
+annotation PBI_ProTooling = ["DevMode","MCP-PBIModeling","DaxQueryView_Desktop"]
+
+ref table Customers
+ref table DateTableTemplate_16a28857-6546-49f2-82f4-f3254e0d51d5
+ref table LocalDateTable_ab3c5d9c-75c9-436a-8476-a5012ecfd4a8
+ref table DateTable
+ref table LocalDateTable_f27c6691-0326-4763-b0df-1c337dda670b
+ref table Geography
+ref table OrderLines
+ref table Orders
+ref table Products
+ref table 'Measures (2)'
+
+ref cultureInfo en-US
+

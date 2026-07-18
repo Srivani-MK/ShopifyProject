@@ -1,0 +1,71 @@
+table OrderLines
+	lineageTag: 86b01974-ad23-4b80-884b-45a87a9ed055
+
+	column order_line_id
+		dataType: string
+		lineageTag: 02bd7e3a-42ae-4640-8d37-0d21d3dc0813
+		summarizeBy: none
+		sourceColumn: order_line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_id
+		dataType: string
+		lineageTag: 5b9afc78-728e-4723-8818-d79a90793cd0
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: string
+		lineageTag: 7adae2c7-eb81-4dc6-9abd-283f70812132
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 8f976df7-6119-485a-bd18-cc6597312b5a
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column discount_pct
+		dataType: double
+		lineageTag: 508a81b1-05d5-4085-9192-7e4a7925ad07
+		summarizeBy: sum
+		sourceColumn: discount_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column line_revenue
+		dataType: double
+		lineageTag: 6592e123-b655-45d7-b3ed-c27ab7054643
+		summarizeBy: sum
+		sourceColumn: line_revenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition OrderLines = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\sriva\Documents\Power BI\PracticeProjects\ShopifyProject\Shopify_Dummy_Data.xlsx"), null, true),
+				    OrderLines_Sheet = Source{[Item="OrderLines",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(OrderLines_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"order_line_id", type text}, {"order_id", type text}, {"product_id", type text}, {"quantity", Int64.Type}, {"discount_pct", type number}, {"line_revenue", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

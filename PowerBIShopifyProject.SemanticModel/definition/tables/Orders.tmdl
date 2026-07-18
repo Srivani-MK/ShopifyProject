@@ -1,0 +1,136 @@
+table Orders
+	lineageTag: a227f4d4-a589-42d6-8b93-5b800e1a40ed
+
+	column order_id
+		dataType: string
+		lineageTag: 428e329f-fa84-4c1e-b318-9f4563f7165c
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: 5b029405-4f7f-4394-aa00-d8e1221f9c5d
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: d97c679f-69c8-4ec3-bb0d-649075efcf7a
+		summarizeBy: none
+		sourceColumn: order_date
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column sales_channel
+		dataType: string
+		lineageTag: a7da0eef-2dd6-4f68-8157-b2aa0b7077d7
+		summarizeBy: none
+		sourceColumn: sales_channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column ad_platform
+		dataType: string
+		lineageTag: a14660b4-10f7-4e88-aa22-4eb54fe0be90
+		summarizeBy: none
+		sourceColumn: ad_platform
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_status
+		dataType: string
+		lineageTag: 162bac79-f488-4979-bd95-40db6827f644
+		summarizeBy: none
+		sourceColumn: order_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column shipping_fee
+		dataType: double
+		lineageTag: 7978fb3f-16f9-4bd6-938e-d1d1057076d0
+		summarizeBy: sum
+		sourceColumn: shipping_fee
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tax_amount
+		dataType: double
+		lineageTag: a527b440-01ca-420a-8a3d-aa5f00763b2f
+		summarizeBy: sum
+		sourceColumn: tax_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column subtotal
+		dataType: double
+		lineageTag: cf9290ee-a2df-42b3-95c6-473719dfa837
+		summarizeBy: sum
+		sourceColumn: subtotal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_amount
+		dataType: double
+		lineageTag: 8318b60c-2870-4f76-bcdf-cf456dfe010c
+		summarizeBy: sum
+		sourceColumn: total_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column First_Order_Flag = ```
+			VAR CustSince = RELATED(Customers[customer_since])
+			                RETURN
+			                IF(YEAR('Orders'[order_date]) = YEAR(CustSince)
+			                &&
+			                MONTH(Orders[order_date]) = 
+			                MONTH(CustSince),
+			                "New",
+			                "Returning"
+			                )
+			```
+		lineageTag: 7b656307-a15d-432f-9a29-373dc72539c3
+		summarizeBy: none
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Cleaned ad_platform: replaces blank values (orders with no paid ad source, i.e. organic/direct traffic) with the label 'Organic' so charts and slicers show a readable category instead of an empty blank bucket. Use this column instead of the raw ad_platform in all visuals.
+	column Ad_Platform_Clean = IF(ISBLANK('Orders'[ad_platform]) || TRIM('Orders'[ad_platform]) = "", "Organic", 'Orders'[ad_platform])
+		dataType: string
+		displayFolder: Cleaned Columns
+		lineageTag: 1b27e6cd-0d4a-479f-928d-2f95f0bd9bcd
+
+	partition Orders = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\sriva\Documents\Power BI\PracticeProjects\ShopifyProject\Shopify_Dummy_Data.xlsx"), null, true),
+				    Orders_Sheet = Source{[Item="Orders",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Orders_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"order_id", type text}, {"customer_id", type text}, {"order_date", type date}, {"sales_channel", type text}, {"ad_platform", type text}, {"order_status", type text}, {"shipping_fee", type number}, {"tax_amount", type number}, {"subtotal", type number}, {"total_amount", type number}}),
+				    #"Capitalized Each Word" = Table.TransformColumns(#"Changed Type",{{"order_status", Text.Proper, type text}})
+				in
+				    #"Capitalized Each Word"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

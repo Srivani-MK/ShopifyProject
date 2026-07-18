@@ -1,0 +1,238 @@
+table 'Measures (2)'
+	lineageTag: 3d4e2414-89c7-423c-a2e7-36b5d93e50c4
+
+	/// Sum of line-item revenue across all order lines. Core revenue KPI used on every page (does not exclude refunded/cancelled orders — see Fulfilled_Revenue for that).
+	measure Total_Revenue = SUM(OrderLines[line_revenue])
+		lineageTag: 22198fdf-ff83-40c3-a217-a19d087b6620
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Distinct count of orders. Counts unique order_id values from OrderLines, so each order counts once even with multiple line items.
+	measure Total_Orders = DISTINCTCOUNT(OrderLines[order_id])
+		formatString: 0
+		lineageTag: 9910a0b1-0dfd-4673-b518-cc5c39dd76f6
+
+	/// Total_Revenue divided by Total_Orders. Uses DIVIDE to safely return blank instead of an error when Total_Orders is 0.
+	measure Average_Order_Value = DIVIDE([Total_Revenue],[Total_Orders])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 9d36d75b-8464-4768-8c06-bb98db81ae41
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	/// Sum of quantity across all order lines. Measures sales volume independent of price/revenue.
+	measure Total_Units_Sold = SUM(OrderLines[quantity])
+		formatString: 0
+		lineageTag: 6ba21c11-c520-4f8d-a5eb-c68ac8649ca0
+
+	/// Total_Revenue filtered to only orders with order_status = 'fulfilled'. Use this instead of Total_Revenue when you need revenue net of cancellations/refunds.
+	measure Fulfilled_Revenue = CALCULATE([Total_Revenue], Orders[order_status] = "fulfilled")
+		lineageTag: 9cf22dd6-0db4-4cec-81c7-8bb0d15755e0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Count of distinct orders where ad_platform is not blank, i.e. orders attributed to a paid ad channel. Note: consider switching to Ad_Platform_Clean <> "Organic" for consistency now that blanks are labeled.
+	measure 'Ad-Driven Orders' = CALCULATE(DISTINCTCOUNT(Orders[order_id]), NOT ISBLANK(Orders[ad_platform]))
+		formatString: 0
+		lineageTag: aed9d2bd-1a63-45b2-8b71-bf28227d6d0f
+
+	/// Year-to-date Total_Revenue using DateTable as the time-intelligence calendar. Requires DateTable to be marked as the official Date Table.
+	measure Revenue_YTD = TOTALYTD([Total_Revenue], DateTable[date])
+		lineageTag: 214a2bbb-5012-4b61-a44f-f1a005619625
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Placeholder target measure: Total_Revenue increased by 10%. Used to demo the Target Goals field on KPI cards. Replace with a real budget table for production use.
+	measure Revenue_Target = [Total_Revenue] * 1.10
+		lineageTag: 5c1e1f39-17aa-410e-9501-2ed46c2eae60
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Distinct count of customers whose order is flagged 'New' in Orders[First_Order_Flag] (their order month matches their customer_since month, i.e. first purchase).
+	measure New_Customers = CALCULATE(DISTINCTCOUNT(Orders[customer_id]), 'Orders'[First_Order_Flag] = "New")
+		formatString: 0
+		lineageTag: fe0e99e5-fc97-4adb-8d12-9035e6c9fb66
+
+	/// Distinct count of customers who placed at least one order.
+	measure Total_Customers = DISTINCTCOUNT(Orders[customer_id])
+		formatString: 0
+		lineageTag: 3f0a467b-23ab-44e6-a4a5-7335405a22eb
+
+	/// Distinct count of customers whose order is flagged 'Returning' in Orders[First_Order_Flag], i.e. not their first purchase month.
+	measure Returning_Customers = CALCULATE(DISTINCTCOUNT(Orders[customer_id]), 'Orders'[First_Order_Flag] = "Returning")
+		formatString: 0
+		lineageTag: eb963149-0a18-49ea-a66f-560288a85f37
+
+	/// Total_Revenue filtered to orders with a blank ad_platform (no paid ad source attributed = organic/direct traffic).
+	measure 'Organic Revenue' = CALCULATE([Total_Revenue], Orders[Ad_Platform_Clean] = "Organic")
+		lineageTag: f659d114-05a2-407e-8b63-6f6a637b9577
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total_Revenue filtered to orders where ad_platform is not blank, i.e. revenue attributed to a paid ad channel.
+	measure Ad_Revenue = CALCULATE([Total_Revenue], NOT ISBLANK('Orders'[ad_platform]))
+		lineageTag: 532485fe-3bf1-4dd8-913c-e7198d54d851
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Share of orders with order_status = 'refunded' out of Total_Orders. Returned as a decimal — format as percentage in the visual.
+	measure Refund_Rate = DIVIDE(CALCULATE([Total_Orders], 'Orders'[order_status] = "refunded"), [Total_Orders])
+		lineageTag: 9bc5ba0a-ebb8-4df3-8107-4fae89a1d11e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Placeholder target measure: Total_Orders increased by 5%. Pairs with the Orders KPI card's Target Goals field.
+	measure Order_Target = [Total_Orders] * 1.05
+		lineageTag: 1c753733-330a-4e31-880d-cd6a5dde8e9f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Placeholder target measure: Ad_Revenue increased by 10%. Pairs with the Ad-Driven Revenue KPI card's Target Goals field.
+	measure Ad_Driven_Revenue_Target = [Ad_Revenue] * 1.1
+		lineageTag: bb338e8f-e19b-4d24-9ee9-16446484862d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total_Revenue that responds to slicing by Orders[Ad_Platform_Clean] (Organic vs each ad platform). Use as the Values field on the Ad Platform bar/donut chart instead of Total_Revenue directly — same numbers, but named to make report authors use the clean column as the axis.
+	measure Revenue_By_Channel_Source = CALCULATE([Total_Revenue])
+		formatString: $#,##0
+		displayFolder: Marketing
+		lineageTag: d1cc3e9b-6182-4803-a270-d893c4dd410c
+
+	/// Month-over-month % change in Total_Revenue using DATEADD on DateTable. Use in the Executive Overview line chart tooltip or as a small trend indicator next to the Revenue KPI card. Requires DateTable marked as Date Table.
+	measure Revenue_MoM_Growth_Pct =
+			VAR CurrentRevenue = [Total_Revenue]
+			VAR PriorMonthRevenue = CALCULATE([Total_Revenue], DATEADD(DateTable[date], -1, MONTH))
+			RETURN DIVIDE(CurrentRevenue - PriorMonthRevenue, PriorMonthRevenue)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Trend Measures
+		lineageTag: 8678a297-73c3-4ea8-8234-82ca22beeba5
+
+	/// Each row's Total_Revenue as a % of grand total revenue (ignores filters from Products/Orders/Customers). Use as a data label on the Top Products bar chart or Category treemap so each bar/segment shows its share of overall revenue.
+	measure Pct_of_Total_Revenue = DIVIDE([Total_Revenue], CALCULATE([Total_Revenue], ALL(Products), ALL(Orders), ALL(Customers)))
+		formatString: 0.0%
+		displayFolder: Product Insights
+		lineageTag: 94c9d972-494e-407c-9ae2-7620b8ce9bab
+
+	/// Returns the single selected product name from a Products slicer for use in a dynamic text box comment. Returns 'Multiple Products' if more than one is selected, and 'All Products' if none/all are selected — keeps the text box readable in every slicer state.
+	measure Selected_Product_Label =
+			VAR SelectedProduct = SELECTEDVALUE(Products[product_name])
+			RETURN
+			IF(
+			    ISBLANK(SelectedProduct),
+			    IF(HASONEVALUE(Products[product_name]), SelectedProduct, "All Products"),
+			    SelectedProduct
+			)
+		displayFolder: Text Box Helpers
+		lineageTag: 4cdda534-06e6-4ca8-8c25-886307237611
+
+	/// Full sentence combining the selected product and its revenue, for use as a dynamic text box comment above a chart, e.g. 'Showing: Classic Cotton Tee — $4,231 in revenue'. Adjusts wording automatically when no single product is selected.
+	measure Selected_Product_Comment = "Showing: " & [Selected_Product_Label] & " — " & FORMAT([Total_Revenue], "$#,##0") & " in revenue"
+		displayFolder: Text Box Helpers
+		lineageTag: 538a8cc7-1b6e-4957-b99d-d3ae643b184c
+
+	/// Total_Revenue from orders where Ad_Platform_Clean = 'Organic' (no paid ad source, i.e. organic/direct traffic). Use in a visual-level filter (drag this measure into the Filters pane and set 'is greater than 0') to isolate organic-only sales, or drop it directly into a chart as a Values field.
+	measure Organic_Sales = CALCULATE([Total_Revenue], Orders[Ad_Platform_Clean] = "Organic")
+		formatString: $#,##0
+		displayFolder: Marketing
+		lineageTag: 74bf01e5-4081-4c9d-a60c-65e2b2f08ebb
+
+	/// Total_Revenue from orders where Ad_Platform_Clean is not 'Organic', i.e. revenue attributed to any paid ad platform (Facebook, Google, TikTok, Instagram, Pinterest Ads). Use in a visual-level filter (drag into Filters pane, 'is greater than 0') to isolate ad-driven sales only, or drop directly into a chart as a Values field.
+	measure Ad_Sales = CALCULATE([Total_Revenue], Orders[Ad_Platform_Clean] <> "Organic")
+		formatString: $#,##0
+		displayFolder: Marketing
+		lineageTag: bc70149e-128b-4d28-a463-5cb98f762190
+
+	/// Ad-driven revenue as a % of Total_Revenue — shows what share of overall sales comes from paid ad channels. Use on KPI cards or as a data label next to Ad_Revenue.
+	measure Pct_Ad_Revenue_of_Total = DIVIDE([Ad_Revenue], [Total_Revenue])
+		formatString: 0.0%
+		displayFolder: Pct Comparisons
+		lineageTag: def12332-cf55-448d-a05c-89ff14191455
+
+	/// Organic Revenue as a % of Total_Revenue — share of overall sales from non-ad-attributed (organic/direct) orders. This plus Pct_Ad_Revenue_of_Total sums to ~100% of revenue.
+	measure Pct_Organic_Revenue_of_Total = DIVIDE([Organic Revenue], [Total_Revenue])
+		formatString: 0.0%
+		displayFolder: Pct Comparisons
+		lineageTag: d5d96c1b-90c7-4a01-8162-6dc2b7f084d2
+
+	/// Ad_Revenue expressed as a % of Organic Revenue (not of total) — e.g. 40% means ad-driven revenue is 40% the size of organic revenue in the current filter context. Uses DIVIDE to return blank instead of erroring when Organic Revenue is 0.
+	measure Ad_vs_Organic_Revenue_Ratio_Pct = DIVIDE([Ad_Revenue], [Organic Revenue])
+		formatString: 0.0%
+		displayFolder: Pct Comparisons
+		lineageTag: 97fafb78-6e12-439e-8821-96b6c5acfc53
+
+	/// Quarter-over-quarter % change in Total_Revenue: current quarter vs the immediately preceding quarter, using DateTable[date] for time intelligence. Requires DateTable marked as the official Date Table (already true — used by Revenue_YTD).
+	measure Revenue_QoQ_Growth_Pct =
+			VAR CurrentRevenue = [Total_Revenue]
+			VAR PriorQuarterRevenue = CALCULATE([Total_Revenue], DATEADD(DateTable[date], -1, QUARTER))
+			RETURN DIVIDE(CurrentRevenue - PriorQuarterRevenue, PriorQuarterRevenue)
+		formatString: 0.0%
+		displayFolder: Pct Comparisons
+		lineageTag: bd20e8bb-83bf-49e9-bd7e-8174ea1cafbf
+
+	/// Year-over-year % change in Total_Revenue vs the same period last year, using SAMEPERIODLASTYEAR on DateTable[date]. Requires DateTable marked as Date Table.
+	measure Revenue_YoY_Growth_Pct =
+			VAR CurrentRevenue = [Total_Revenue]
+			VAR PriorYearRevenue = CALCULATE([Total_Revenue], SAMEPERIODLASTYEAR(DateTable[date]))
+			RETURN DIVIDE(CurrentRevenue - PriorYearRevenue, PriorYearRevenue)
+		formatString: 0.0%
+		displayFolder: Pct Comparisons
+		lineageTag: 7f761e75-c165-4374-8e9a-9bed9c72f419
+
+	/// Each paid ad platform's share of total Ad_Revenue — e.g. Facebook Ads revenue ÷ (all ad platforms' revenue combined). Put Orders[Ad_Platform_Clean] on the axis/legend with this measure as Values to show platform mix as a %. Organic rows will show blank since Ad_Revenue excludes organic orders.
+	measure Ad_Platform_Mix_Pct = DIVIDE([Ad_Revenue], CALCULATE([Ad_Revenue], REMOVEFILTERS(Orders[Ad_Platform_Clean])))
+		formatString: 0.0%
+		displayFolder: Pct Comparisons
+		lineageTag: 98ed2f2d-9cd0-495d-b377-683c4bd1ae3f
+
+	/// Exec question: 'Are we on pace to hit our revenue goal?' Total_Revenue as a % of Revenue_Target — 100% means on target, below 100% means behind goal.
+	measure Pct_of_Revenue_Target = DIVIDE([Total_Revenue], [Revenue_Target])
+		formatString: 0.0%
+		displayFolder: Executive KPIs
+		lineageTag: 6bafcf03-a59a-454c-8436-e49680bc81c2
+
+	/// Exec question: 'Are we on pace to hit our order volume goal?' Total_Orders as a % of Order_Target.
+	measure Pct_of_Order_Target = DIVIDE([Total_Orders], [Order_Target])
+		formatString: 0.0%
+		displayFolder: Executive KPIs
+		lineageTag: 346838d7-bcdb-49ed-8179-37112cc4c520
+
+	/// Exec question: 'How much top-line revenue are we losing to cancellations/refunds?' Complements Refund_Rate (which counts orders) by measuring the dollar impact instead.
+	measure Pct_Revenue_Lost_to_Refunds = DIVIDE([Total_Revenue] - [Fulfilled_Revenue], [Total_Revenue])
+		formatString: 0.0%
+		displayFolder: Executive KPIs
+		lineageTag: b1c7daff-4f13-4024-a824-02be097261fa
+
+	/// PO/Exec question: 'Is growth coming from acquiring new customers or just repeat buyers?' Share of Total_Revenue from orders placed in a customer's first purchase month.
+	measure Pct_Revenue_from_New_Customers =
+			VAR NewRevenue = CALCULATE([Total_Revenue], Orders[First_Order_Flag] = "New")
+			RETURN DIVIDE(NewRevenue, [Total_Revenue])
+		formatString: 0.0%
+		displayFolder: Executive KPIs
+		lineageTag: b6ed89ad-5820-4fa8-91bc-d1e575c203fc
+
+	/// PO/Exec question: 'How dependent are we on repeat customers for revenue?' Share of Total_Revenue from non-first-purchase orders. Should roughly complement Pct_Revenue_from_New_Customers.
+	measure Pct_Revenue_from_Returning_Customers =
+			VAR ReturningRevenue = CALCULATE([Total_Revenue], Orders[First_Order_Flag] = "Returning")
+			RETURN DIVIDE(ReturningRevenue, [Total_Revenue])
+		formatString: 0.0%
+		displayFolder: Executive KPIs
+		lineageTag: f447228e-7001-4124-97c0-e71894230f7d
+
+	/// Exec/marketing question: 'What share of orders needed paid ad spend to convert, vs coming in organically?' Pair with Pct_Ad_Revenue_of_Total to see if ad-driven orders skew higher or lower value than organic ones.
+	measure Pct_Ad_Driven_Orders = DIVIDE([Ad-Driven Orders], [Total_Orders])
+		formatString: 0.0%
+		displayFolder: Executive KPIs
+		lineageTag: 75d27eae-5597-4298-8eae-9d328948931b
+
+	partition 'Measures (2)' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

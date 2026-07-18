@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "d020a0b244b3aaedb043",
+  "position": {
+    "x": 308.02831142568249,
+    "y": 5.1769464105156722,
+    "z": 15000,
+    "height": 64.711830131445907,
+    "width": 867.138523761375,
+    "tabOrder": 13000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Revenue contributed Organic/Direct Sales is high compared to Ad_Driven Sales. "
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Organic revenue is high during Q3 and Q4, multiple customers ordered during those period. Predictions : Could be due to festival season for increased revenue."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

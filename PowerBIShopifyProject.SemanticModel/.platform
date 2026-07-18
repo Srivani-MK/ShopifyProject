@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "PowerBIShopifyProject"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "63da5a76-c829-4b71-ab81-83e2be7231ca"
+  }
+}

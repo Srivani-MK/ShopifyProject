@@ -1,0 +1,70 @@
+table Geography
+	lineageTag: 9e4c7f64-be83-409a-bd74-9df1512c8526
+
+	column city
+		dataType: string
+		lineageTag: 752d23af-2e08-4f90-8d27-a329ff2768ca
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column region_state
+		dataType: string
+		lineageTag: fc8b1fcf-a57e-44d2-90e0-d7d9e19883ba
+		summarizeBy: none
+		sourceColumn: region_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		lineageTag: f0a4a75a-855d-4a84-973d-20a7a508cee0
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	column continent
+		dataType: string
+		lineageTag: 32fe50da-b47c-42b9-86c8-73e2c7c1419f
+		summarizeBy: none
+		sourceColumn: continent
+
+		annotation SummarizationSetBy = Automatic
+
+	column latitude
+		dataType: double
+		lineageTag: 3b531dd0-da89-4550-bed7-db135bfde474
+		summarizeBy: none
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column longitude
+		dataType: double
+		lineageTag: 57ad45a0-3f67-44f0-9b61-39b3053738e4
+		summarizeBy: none
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Geography = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\sriva\Documents\Power BI\PracticeProjects\ShopifyProject\Shopify_Dummy_Data.xlsx"), null, true),
+				    Geography_Sheet = Source{[Item="Geography",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Geography_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"city", type text}, {"region_state", type text}, {"country", type text}, {"continent", type text}, {"latitude", type number}, {"longitude", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
