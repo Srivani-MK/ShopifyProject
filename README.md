@@ -74,6 +74,10 @@ Synthetic Shopify-style order data ([`Shopify_Dummy_Data.xlsx`](./Shopify_Dummy_
 
 Power BI Desktop (PBIP project format — text-based, git-friendly), DAX, Power Query.
 
+## License
+
+MIT — see [`LICENSE`](./LICENSE). Data is synthetic; feel free to reuse the model/DAX patterns.
+
 ## Opening this project
 
 1. Requires Power BI Desktop with the **Power BI Project (.pbip)** preview feature enabled (Options → Preview features).
@@ -81,4 +85,16 @@ Power BI Desktop (PBIP project format — text-based, git-friendly), DAX, Power 
 
 ## Screenshots
 
-*(Add exported page images here — see note below.)*
+| Executive Overview | Navigation & Summary |
+|---|---|
+| ![Executive Overview](./screenshots/02-executive-overview.png) | ![Navigation & Summary](./screenshots/01-navigation-summary.png) |
+
+| Orders | Product & Customer Insights |
+|---|---|
+| ![Orders](./screenshots/03-orders.png) | ![Product & Customer Insights](./screenshots/04-product-customer-insights.png) |
+
+| Top 5 Products (Pareto) | Marketing / Ad Performance |
+|---|---|
+| ![Top 5 Products Revenue Contribution](./screenshots/05-top5-products-pareto.png) | ![Marketing / Ad Performance](./screenshots/06-marketing-ad-performance.png) |
+
+*(Export instructions: [`screenshots/NOTES.md`](./screenshots/NOTES.md).)*
